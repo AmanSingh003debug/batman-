@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Layout from "../components/Layout";
-import { loadState, saveState, todayStr, formatDate, defaultDay, calcScore, MUSCLE_GROUPS, AppState, DayData, WorkoutSet, uid } from "../lib/data";
+import { loadState, saveState, todayStr, formatDate, defaultDay, calcScore, MUSCLE_GROUPS, AppState, DayData, WorkoutSet } from "../lib/data";
 
 const COMMON_EXERCISES: Record<string, string[]> = {
   Chest: ["Bench Press", "Incline Bench", "Push Ups", "Cable Flyes", "Chest Dips"],
@@ -76,13 +76,17 @@ export default function WorkoutPage() {
             <div className="font-cinzel" style={{ color: "#f5c518", fontSize: 20, fontWeight: 700, letterSpacing: "0.1em", marginBottom: 4 }}>💪 GYM LOG</div>
             <div style={{ color: "#555", fontSize: 13, fontFamily: "Rajdhani" }}>{formatDate(today_key)}</div>
           </div>
-          {/* Done toggle */}
           <button onClick={() => updateWorkout({ done: !w.done })}
             style={{
-              padding: "10px 24px", borderRadius: 6, cursor: "pointer", border: "none",
+              padding: "10px 24px",
+              borderRadius: 6,
+              cursor: "pointer",
               background: w.done ? "#22c55e" : "rgba(34,197,94,0.15)",
               color: w.done ? "#0a0a0a" : "#22c55e",
-              fontFamily: "Cinzel, serif", fontSize: 12, fontWeight: 700, letterSpacing: "0.15em",
+              fontFamily: "Cinzel, serif",
+              fontSize: 12,
+              fontWeight: 700,
+              letterSpacing: "0.15em",
               border: w.done ? "none" : "1px solid rgba(34,197,94,0.4)",
               transition: "all 0.2s",
             }}>
@@ -90,7 +94,6 @@ export default function WorkoutPage() {
           </button>
         </div>
 
-        {/* Setup row */}
         <div className="bat-card" style={{ padding: "20px 24px", borderRadius: 8, marginBottom: 20 }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px,1fr))", gap: 16 }}>
             <div>
@@ -107,7 +110,6 @@ export default function WorkoutPage() {
           </div>
         </div>
 
-        {/* Progress bar */}
         {totalSets > 0 && (
           <div className="bat-card" style={{ padding: "16px 24px", borderRadius: 8, marginBottom: 20 }}>
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
@@ -120,7 +122,6 @@ export default function WorkoutPage() {
           </div>
         )}
 
-        {/* Exercise list */}
         <div className="bat-card" style={{ padding: "20px 24px", borderRadius: 8, marginBottom: 20 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
             <div className="font-cinzel" style={{ color: "#888", fontSize: 11, letterSpacing: "0.15em" }}>EXERCISES</div>
@@ -158,7 +159,6 @@ export default function WorkoutPage() {
             </div>
           )}
 
-          {/* Quick suggestions */}
           {suggestions.length > 0 && (
             <div style={{ marginTop: 16 }}>
               <div style={{ fontSize: 11, color: "#555", fontFamily: "Rajdhani", letterSpacing: "0.1em", marginBottom: 8 }}>QUICK ADD:</div>
@@ -174,14 +174,12 @@ export default function WorkoutPage() {
           )}
         </div>
 
-        {/* Notes */}
         <div className="bat-card" style={{ padding: "20px 24px", borderRadius: 8 }}>
           <div className="font-cinzel" style={{ color: "#888", fontSize: 11, letterSpacing: "0.15em", marginBottom: 10 }}>WORKOUT NOTES</div>
           <textarea value={w.notes} onChange={e => updateWorkout({ notes: e.target.value })}
             placeholder="How did the session go? PRs, injuries, energy level..." rows={3} style={{ width: "100%", resize: "vertical" }} />
         </div>
 
-        {/* Add Set Modal */}
         {showAddSet && (
           <div className="modal-overlay" onClick={e => { if (e.target === e.currentTarget) setShowAddSet(false); }}>
             <div className="modal-box">
