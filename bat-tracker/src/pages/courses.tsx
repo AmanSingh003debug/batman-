@@ -18,7 +18,8 @@ export default function CoursesPage() {
   useEffect(() => {
     const s = loadState();
     if (!s.days[today_key]) s.days[today_key] = defaultDay(today_key);
-    setState(s); setToday(s.days[today_key]);
+    setState(s);
+    setToday(s.days[today_key]);
   }, []);
 
   function updateTasks(tasks: CourseTask[]) {
@@ -26,12 +27,21 @@ export default function CoursesPage() {
     const updated = { ...today, tasks };
     updated.productivityScore = calcScore(updated);
     const ns = { ...state, days: { ...state.days, [today_key]: updated } };
-    setState(ns); setToday(updated); saveState(ns);
+    setState(ns);
+    setToday(updated);
+    saveState(ns);
   }
 
   function addTask() {
     if (!newTask.title.trim()) return;
-    const task: CourseTask = { id: uid(), title: newTask.title.trim(), course: activeTab, section: newTask.section, done: false, timeSpent: newTask.timeSpent };
+    const task: CourseTask = {
+      id: uid(),
+      title: newTask.title.trim(),
+      course: activeTab,
+      section: newTask.section,
+      done: false,
+      timeSpent: newTask.timeSpent,
+    };
     updateTasks([...(today?.tasks || []), task]);
     setNewTask({ title: "", section: activeTab === "webdev" ? "HTML" : "Arrays", timeSpent: 30 });
     setShowAdd(false);
@@ -51,7 +61,11 @@ export default function CoursesPage() {
     updateTasks(tasks);
   }
 
-  if (!state || !today) return <Layout title="Courses"><div style={{ textAlign: "center", padding: 80, color: "#f5c518" }}>Loading...</div></Layout>;
+  if (!state || !today) return (
+    <Layout title="Courses">
+      <div style={{ textAlign: "center", padding: 80, color: "#f5c518" }}>Loading...</div>
+    </Layout>
+  );
 
   const filtered = today.tasks.filter(t => t.course === activeTab);
   const done = filtered.filter(t => t.done).length;
@@ -62,22 +76,22 @@ export default function CoursesPage() {
   return (
     <Layout title="Courses">
       <div className="animate-fade-in">
+
         <div style={{ marginBottom: 28 }}>
           <div className="font-cinzel" style={{ color: "#f5c518", fontSize: 20, fontWeight: 700, letterSpacing: "0.1em", marginBottom: 4 }}>📚 COURSE TRACKER</div>
           <div style={{ color: "#555", fontSize: 13, fontFamily: "Rajdhani" }}>{formatDate(today_key)}</div>
         </div>
 
-        {/* Course Tabs */}
+        {/* Tabs */}
         <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
           {(["webdev", "dsa"] as const).map(tab => (
-            <button key={tab} onClick={() => setActiveTab(tab)}
-              className={`tab-btn ${activeTab === tab ? "active" : ""}`}>
+            <button key={tab} onClick={() => setActiveTab(tab)} className={`tab-btn ${activeTab === tab ? "active" : ""}`}>
               {tab === "webdev" ? "🌐 Web Dev" : "⚡ DSA"}
             </button>
           ))}
         </div>
 
-        {/* Apna College Progress Card */}
+        {/* Apna College Progress */}
         <div className="bat-card animate-slide-up" style={{ padding: "20px 24px", borderRadius: 8, marginBottom: 20, border: "1px solid rgba(245,197,24,0.25)" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, flexWrap: "wrap", gap: 8 }}>
             <div>
@@ -97,7 +111,7 @@ export default function CoursesPage() {
           </div>
         </div>
 
-        {/* Today stats */}
+        {/* Stats */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12, marginBottom: 20 }}>
           {[
             { label: "TASKS TODAY", value: `${done}/${filtered.length}`, color: done === filtered.length && filtered.length > 0 ? "#22c55e" : "#f5c518" },
@@ -111,7 +125,7 @@ export default function CoursesPage() {
           ))}
         </div>
 
-        {/* Task list */}
+        {/* Task List */}
         <div className="bat-card" style={{ padding: "20px 24px", borderRadius: 8, marginBottom: 20 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
             <div className="font-cinzel" style={{ color: "#888", fontSize: 11, letterSpacing: "0.15em" }}>TODAY'S TASKS</div>
@@ -154,7 +168,7 @@ export default function CoursesPage() {
           )}
         </div>
 
-        {/* Section breakdown if tasks exist */}
+        {/* Section Breakdown */}
         {filtered.length > 0 && (
           <div className="bat-card" style={{ padding: "20px 24px", borderRadius: 8 }}>
             <div className="font-cinzel" style={{ color: "#888", fontSize: 11, letterSpacing: "0.15em", marginBottom: 14 }}>BY SECTION</div>
@@ -183,8 +197,13 @@ export default function CoursesPage() {
               <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                 <div>
                   <label style={{ display: "block", fontSize: 12, color: "#666", fontFamily: "Rajdhani", marginBottom: 6 }}>Topic / Task</label>
-                  <input value={newTask.title} onChange={e => setNewTask(p => ({ ...p, title: e.target.value }))}
-                    placeholder={activeTab === "webdev" ? "e.g. Flexbox Layout Practice" : "e.g. Binary Search Problems"} style={{ width: "100%" }} />
+                  <input
+                    type="text"
+                    value={newTask.title}
+                    onChange={e => setNewTask(p => ({ ...p, title: e.target.value }))}
+                    placeholder={activeTab === "webdev" ? "e.g. Flexbox Layout Practice" : "e.g. Binary Search Problems"}
+                    style={{ width: "100%", background: "rgba(26,26,26,0.9)", border: "1px solid rgba(245,197,24,0.3)", color: "#fff", borderRadius: 4, padding: "8px 12px", fontFamily: "Rajdhani", fontSize: 14, outline: "none" }}
+                  />
                 </div>
                 <div>
                   <label style={{ display: "block", fontSize: 12, color: "#666", fontFamily: "Rajdhani", marginBottom: 6 }}>Section</label>
@@ -211,6 +230,7 @@ export default function CoursesPage() {
             </div>
           </div>
         )}
+
       </div>
     </Layout>
   );
